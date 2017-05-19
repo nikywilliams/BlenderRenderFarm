@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 public class BlenderRanderFarm {
+ 
 
   /**
    * 
@@ -33,59 +34,14 @@ public class BlenderRanderFarm {
     // Screen aspect ratio (1280 default)
     // vbps param
     
-    // Used to hold the lines of the config file
-    final String fileName = "config.conf";
-    ArrayList<String> configLines = new ArrayList<String>();
-    int lineCounter = 1;
-    String blenderExecutableLocation = "";
-    String blendFilesLocation = "";
-    String imageOutputLocation = "";
-    String threadParameter = "";
-    String renderType = "";
+    parseConfigFile("config.conf");    
     
-    // Pull in config file
-    try{      
-      String configLine = "";
-      BufferedReader reader = new BufferedReader(new FileReader(fileName));
-      
-      while ((configLine = reader.readLine()) != null) {
-        configLines.add(configLine);
-      }
-      reader.close();
-      
-    }
-    catch (Exception e) {
-      System.out.println(e);
-    }
-    
-    // Parse the config file for information    
-    for (String configLine : configLines) {
-      
-      // Check for blank lines or comments
-      if (configLine.trim().compareTo("") == 0 || configLine.getBytes()[0] == '#') 
-       continue;
-      
-      // See which config information this is
-      switch (lineCounter) {
-        case 1:
-          blenderExecutableLocation = configLine;
-          break;
-        case 2:
-          blendFilesLocation = configLine;
-          break;
-        case 3:
-          imageOutputLocation = configLine;
-          break;
-        case 4:
-          threadParameter = configLine;
-          break;
-        case 5:
-          renderType = configLine;
-          break;
-      }
-      
-      lineCounter++;
-    }
+  }
+  
+  /**
+   * 
+   */
+  public void parseConfigFile(String configFileName) {
     
   }
 }
