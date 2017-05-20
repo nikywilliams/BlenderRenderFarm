@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Configuration {
 
@@ -20,12 +21,7 @@ public class Configuration {
    */
   public Configuration() {
     // Used for config file parsing
-    ArrayList<String> configLines = new ArrayList<String>();
-
-    String currentDirectory;
-    File file = new File(".");
-    currentDirectory = file.getAbsolutePath();
-    System.out.println("Current working directory : "+currentDirectory);
+    ArrayList<String> configLinesList = new ArrayList<String>();
 
     // Pull in config file
     try {
@@ -33,32 +29,58 @@ public class Configuration {
       BufferedReader reader = new BufferedReader(new FileReader(_configFileName));
 
       while ((configLine = reader.readLine()) != null) {
-        configLines.add(configLine);
+        configLinesList.add(configLine);
       }
       reader.close();
 
-    } catch (Exception e) {
+    }
+    catch (Exception e) {
       System.out.println(e);
     }
 
     // Parse the config file for information
-    for (String configLine : configLines) {
+    for (int i = 0; i < configLinesList.size(); i++) {
 
       // Check for blank lines or comments, and skip if we have that
-      if (configLine.trim().compareTo("") == 0 || configLine.getBytes()[0] == '#')
+      if (configLinesList.get(i).trim().compareTo("") == 0 || configLinesList.get(i).getBytes()[0] == '#')
         continue;
 
       // See which config information this is
-      if (configLine.compareTo("[BLENDER_EXECUTABLE]") == 0)
-        _blenderExecutableLocation = configLine;
-      else if (configLine.compareTo("[BLEND_FILES_LOCATION]") == 0)
-        _blendFilesLocation = configLine;
-      else if (configLine.compareTo("[OUTPUT_LOCATION]") == 0)
-        _outputLocation = configLine;
-      else if (configLine.compareTo("[THREADS]") == 0)
-        _threads = configLine;
-      else if (configLine.compareTo("[RENDER_TYPE]") == 0)
-        _renderType = configLine;
+      if (configLinesList.get(i).compareTo("[BLENDER_EXECUTABLE]") == 0)
+        _blenderExecutableLocation = configLinesList.get(i + 1);
+      else if (configLinesList.get(i).compareTo("[BLEND_FILES_LOCATION]") == 0)
+        _blendFilesLocation = configLinesList.get(i + 1);
+      else if (configLinesList.get(i).compareTo("[OUTPUT_LOCATION]") == 0)
+        _outputLocation = configLinesList.get(i + 1);
+      else if (configLinesList.get(i).compareTo("[THREADS]") == 0)
+        _threads = configLinesList.get(i + 1);
+      else if (configLinesList.get(i).compareTo("[RENDER_TYPE]") == 0)
+        _renderType = configLinesList.get(i + 1);
     }
+
+    System.out.println(_blenderExecutableLocation + "\n" + _blendFilesLocation + "\n" + _outputLocation + "\n" + _threads + "\n" + _renderType);
+  }
+
+  /**
+   * Getters/Setters
+   */
+  public String getBlenderExecutableLocation() {
+    return (_blenderExecutableLocation);
+  }
+
+  public String getBlendFilesLocation() {
+    return (_blendFilesLocation);
+  }
+
+  public String getOutputLocation() {
+    return (_outputLocation);
+  }
+
+  public String getThreads() {
+    return (_threads);
+  }
+
+  public String getRenderType() {
+    return (_renderType);
   }
 }
