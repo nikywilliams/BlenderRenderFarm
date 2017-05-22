@@ -13,30 +13,10 @@ public class BlenderRanderFarm {
   private static ProcessedFiles _processedFiles = null;
 
   /**
+   * Read from config file for more information
    * @param args
    */
   public static void main(String[] args) {
-
-    // Runs in loop waiting for new file to be dropped into remote location
-    // Keeps local file of projects started and projects completed
-    //  i.e. list.wip or list.cmp
-    // Pull list of directory file names in remote location and compares to cmp list. If not in there, pull it and stick in wip
-    // wip must be empty before pulling another one
-    // Ignore # in config file as "comment"
-
-    // Read from config file for
-    // blender executable location on local box
-    // blender .blend files location on remote box
-    // output location of images for animation
-    // animation or frame parameter i.e. -a or -f 200
-
-    // Later version
-    // FFMPEG
-    // Optional audio param
-    // Same destination as above
-    // Optional kbps for audio
-    // Screen aspect ratio (1280 default)
-    // vbps param
 
     // Parses configuration
     parseConfiguration();
@@ -128,29 +108,27 @@ public class BlenderRanderFarm {
 
   /**
    * Process the blend file here
+   *
    * @param blendFile
    */
   private static void processBlenderFile(String blendFile) {
 
-    // Build the command line needed to start blender up and execute blender
-    /*String commandLine = _configuration.getBlenderExecutableLocation() + "blender.exe"
-            + " -b " + _configuration.getBlendFilesLocation() + blendFile
-            + " -o " + _configuration.getOutputLocation() + blendFile + "\\IMG_####"
-            + " " + _configuration.getThreads()
-            + " " + _configuration.getRenderType();*/
-    //System.out.println(commandLine);
-
     try {
-      String[] commands = {_configuration.getBlenderExecutableLocation() + "blender.exe",
+      String[] renderTypeList = _configuration.getRenderType().split(" ");
+      ArrayList<String> commands = new ArrayList<String>(Arrays.asList(
+              _configuration.getBlenderExecutableLocation() + "blender.exe",
               "-b",
               _configuration.getBlendFilesLocation() + blendFile,
               "-o",
               _configuration.getOutputLocation() + blendFile + "\\IMG_####",
               "-t",
               _configuration.getThreads(),
-              "-a" };
-      ProcessBuilder pb = new ProcessBuilder(commands);
+              "-" + renderTypeList[0]));
 
+      if (renderTypeList.length > 1)
+        commands.add(renderTypeList[1]);
+
+      ProcessBuilder pb = new ProcessBuilder(commands);
       System.out.println(pb.command().toString());
       Process p = pb.start();
       InputStream is = p.getInputStream();

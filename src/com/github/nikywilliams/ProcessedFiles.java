@@ -62,8 +62,8 @@ public class ProcessedFiles {
   public void addProcessedFile(String processedFileName) {
     try {
       // Now read the file
-      BufferedWriter writer = new BufferedWriter(new FileWriter(_processedFilesName));
-      writer.write(processedFileName + "\r\n");
+      BufferedWriter writer = new BufferedWriter(new FileWriter(_processedFilesName, true));
+      writer.append(processedFileName + "\r\n");
       writer.close();
     }
     catch (Exception e) {
